@@ -2,7 +2,7 @@
 
 Cloudflare Worker (TypeScript + [Hono](https://hono.dev/)) that exposes the sandbox HTTP API. Creates and manages sandboxed execution environments backed by [Cloudflare Containers](https://developers.cloudflare.com/containers/).
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/sandbox-sdk/tree/main/bridge/worker)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/zonlabs/cloudflare-sandbox-bridge/tree/main)
 
 ## Prerequisites
 
@@ -41,6 +41,18 @@ npx wrangler login
 npx wrangler secret put SANDBOX_API_KEY    # paste a token from: openssl rand -hex 32
 npx wrangler deploy
 ```
+
+### CI / non-interactive deploy (fixes `[ERROR] Unauthorized`)
+
+If you run `wrangler deploy` in a CI environment (GitHub Actions, Workers Builds, etc), you will not have an interactive `wrangler login` session. In that case, Wrangler must authenticate using environment variables:
+
+- `CLOUDFLARE_API_TOKEN` (recommended) - an API token with **Workers Scripts:Edit** and **Account:Read**
+- `CLOUDFLARE_ACCOUNT_ID` - your Cloudflare account ID (or configure `account_id` in your Wrangler config)
+
+This repo includes a ready-to-use GitHub Actions workflow at `.github/workflows/deploy.yml` that deploys on pushes to `main`. Add these repository secrets:
+
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
 
 Verify the deployment:
 
